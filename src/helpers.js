@@ -50,7 +50,7 @@ module.exports = {
         }
     },
     transferToBuildings: function(creep) {
-        var listOfStructures = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER]
+        var listOfStructures = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN]
         var targets = creep.room.find(FIND_STRUCTURES, {
             filter: (structure) => {
                 return listOfStructures.indexOf(structure.structureType) > -1 && structure.energy < structure.energyCapacity
