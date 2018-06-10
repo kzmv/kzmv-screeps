@@ -4,10 +4,6 @@ module.exports = {
         if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
             this.pickupResources(creep);
         } else {
-            var sources = _.filter(creep.room.find(FIND_SOURCES));
-            if (!creep.memory.sourceId) {
-                creep.memory.sourceId = sources[creepers.indexOf(creep) % sources.length].id
-            }
             var source = Game.getObjectById(creep.memory.sourceId)
             if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
@@ -50,6 +46,20 @@ module.exports = {
         if (targets.length > 0) {
             if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } })
+            }
+        }
+    },
+    transferToBuildings: function(creep) {
+        var listOfStructures = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER]
+        var targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (structure) => {
+                return listOfStructures.indexOf(structure.structureType) > -1 && structure.energy < structure.energyCapacity
+            }
+        });
+        targets = _.sortBy(targets,s => creep.pos.getRangeTo(s))
+        if(targets.length > 0) {
+            if(creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
             }
         }
     },
