@@ -13,7 +13,7 @@ var idList = [
     "59f1a13a82100e1594f37efe"
 ]
 function getSourceId(roleType){
-    if(_.filter(Game.creeps, (c) => c.memory.role == roleType && c.memory.sourceId != idList[0]) < 3){
+    if(_.filter(Game.creeps, (c) => c.memory.role == roleType && c.memory.sourceId != idList[0]).length < 3){
         return idList[1];
     }
     return idList[0]
