@@ -4,7 +4,7 @@ var roles = {
         count:8,
         priority: 7,
         name: "Harvester",
-        template: [WORK,  CARRY,  MOVE, MOVE],
+        template: [WORK, WORK, CARRY, MOVE],
     },
     upgrader: {
         count: 3,
@@ -19,7 +19,7 @@ var roles = {
         template: [WORK, CARRY, MOVE, MOVE ],
     },
     repairer: {
-        count: 10,
+        count: 1,
         priority: -1,
         name: "Repairer",
         template: [WORK, CARRY, MOVE, MOVE],
