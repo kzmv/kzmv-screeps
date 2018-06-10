@@ -1,0 +1,17 @@
+{
+  "name": "kzmv-screeps",
+  "version": "1.0.0",
+  "description": "screeps codebase",
+  "main": "gruntfile.js",
+  "dependencies": {
+    "grunt": "^1.0.3",
+    "grunt-screeps": "^1.4.0",
+    "@types/screeps": "^2.3.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
