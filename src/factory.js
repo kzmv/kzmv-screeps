@@ -7,24 +7,39 @@
  * mod.thing == 'a thing'; // true
  */
 var roles = require('roles');
+var _ = require('lodash');
 
 var idList = [
     "59f1a13a82100e1594f37efc",
     "59f1a13a82100e1594f37efe"
 ];
 
-function getSourceId(roleType) {
-    if ( _.filter(Game.creeps, (creep) => creep.memory.role == roleType &&  creep.memory.sourceId == idList[1]).length <= roles[roleType].count/3) {
-         return idList[1];
+function getSourceId(roleType, room) {
+    var sourcesAccessPoints = _.sortBy(room.getSourcesAcessPoints(), 'ap');
+    var totalAps = 0;
+    for (let source of sourcesAccessPoints) {
+        totalAps += source.ap;
     }
-    return idList[0]
+    var creeps = _.filter(Game.creeps, (creep) => creep.memory.role == roleType);
+    sourcesAccessPoints = sourcesAccessPoints.map(s => {
+        return { 
+            ...s, 
+            creepCount: Math.round(roles[roleType].count / (totalAps / s.ap)) 
+        }
+    });
+    for (let source of sourcesAccessPoints) {
+        if (_.filter(Game.creeps, (creep) => creep.memory.role == roleType && creep.memory.sourceId == source.id).length < source.creepCount) {
+            return source.id;
+        }
+    }
+    return sourcesAccessPoints[sourcesAccessPoints.length - 1].id;
 }
 
 var civilianFactory = {
     run: function (spawner) {
         for (var name in Memory.creeps) {
             if (!Game.creeps[name]) {
-                
+
                 delete Memory.creeps[name];
                 console.log('Clearing non-existing creep memory:', name);
             }
@@ -33,16 +48,14 @@ var civilianFactory = {
         var prioritisedRoles = _.sortBy(Object.keys(roles), (roleName) => roles[roleName].priority)
         prioritisedRoles = _.filter(prioritisedRoles, r => _.filter(Game.creeps, (creep) => creep.memory.role == r).length < roles[r].count)
         var roleType = prioritisedRoles[0];
-        console.log(prioritisedRoles)
         if (roleType) {
             var creep = roles[roleType];
-
             var newName = creep.name + Game.time;
             var dryRun = spawner.spawnCreep(creep.template, newName, { dryRun: true })
             if (dryRun === 0) {
                 console.log('Spawning new ' + roleType + ': ' + newName);
                 spawner.spawnCreep(creep.template, newName,
-                    { memory: { role: roleType, sourceId: getSourceId(roleType), working: true } });
+                    { memory: { role: roleType, sourceId: getSourceId(roleType, spawner.room), working: true } });
                 console.log("Next in queue: " + roleType)
                 console.log("Priority queue: " + prioritisedRoles);
 

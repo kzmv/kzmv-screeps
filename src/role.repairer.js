@@ -1,5 +1,5 @@
 var roleBuilder = require('role.builder');
-var helper = require('helpers');
+var helper = require('role.helpers');
 
 module.exports = {
     run: function(creep) {

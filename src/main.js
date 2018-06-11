@@ -5,14 +5,13 @@ var roleBuilder = require('role.builder');
 var roleRepairer = require('role.repairer');
 var roleCarrier = require('role.carrier');
 var factory = require('factory');
-
+require('game.helpers');
 /*
-1. Exclude unwanted source ids
 
 */
 
 module.exports.loop = function () {
-    
+
     for (let name in Game.creeps) {
         var creep = Game.creeps[name];
 
@@ -33,7 +32,17 @@ module.exports.loop = function () {
         }
     }
 
-   factory.run(Game.spawns['Spawn1']);
+    factory.run(Game.spawns['Spawn1']);
+
+    var towers = Game.rooms["W27N54"].find(FIND_STRUCTURES, {
+        filter: (s) => s.structureType == STRUCTURE_TOWER
+    });
+    for (let tower of towers) {
+        var target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+        if (target) {
+            tower.attack(target);
+        }
+    }
 
 
 };

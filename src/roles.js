@@ -3,7 +3,7 @@ var roles = {
     harvester: {
         count: 12,
         name: "Harvester",
-        template: [WORK, WORK, WORK, CARRY, MOVE],
+        template: [WORK, WORK, CARRY, MOVE],
         priority: -11,
     },
     upgrader: {
@@ -13,7 +13,7 @@ var roles = {
         priority: -9,
     },
     builder: {
-        count: 2,
+        count: 1,
         name: "Builder",
         template: [WORK,  CARRY, MOVE, MOVE ],
         priority: -4,
