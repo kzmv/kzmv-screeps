@@ -20,8 +20,6 @@ module.exports = {
             if (creep.withdraw(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } })
             }
-        } else {
-            this.extractFromSource(creep);
         }
     },
     transferToContainer: function (creep) {
