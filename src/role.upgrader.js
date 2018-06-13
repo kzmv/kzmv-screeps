@@ -17,7 +17,12 @@ module.exports = {
             }
         }
         else {
-            helper.extractFromContainer(creep);
+            if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
+                helper.pickupResources(creep);
+            } else {
+                helper.extractFromContainer(creep);
+            }
+            
         }
     }
 };

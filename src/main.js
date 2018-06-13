@@ -7,7 +7,11 @@ var roleCarrier = require('role.carrier');
 var factory = require('factory');
 require('game.helpers');
 /*
-
+    1. CLI
+    2. Optimize Role Helper and Roles
+    3. Reserve Rooms
+    4. Multi tool for expanding
+    5. Lair Keep
 */
 
 module.exports.loop = function () {
