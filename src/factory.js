@@ -9,10 +9,6 @@
 var roles = require('roles');
 var _ = require('lodash');
 
-var idList = [
-    "59f1a13a82100e1594f37efc",
-    "59f1a13a82100e1594f37efe"
-];
 
 function getSourceId(roleType, room) {
     var sourcesAccessPoints = _.sortBy(room.getSourcesAcessPoints(), 'ap');
@@ -54,8 +50,12 @@ var civilianFactory = {
             var dryRun = spawner.spawnCreep(creep.template, newName, { dryRun: true })
             if (dryRun === 0) {
                 console.log('Spawning new ' + roleType + ': ' + newName);
+                var memory = { role: roleType, sourceId: getSourceId(roleType, spawner.room), working: true}
+                memory['targetRoom'] = roles[roleType].room;
+                console.log('Memory: ' + memory);
+                console.log('Template: ' + creep.template);
                 spawner.spawnCreep(creep.template, newName,
-                    { memory: { role: roleType, sourceId: getSourceId(roleType, spawner.room), working: true } });
+                    { memory: memory });
                 console.log("Next in queue: " + roleType)
                 console.log("Priority queue: " + prioritisedRoles);
 
