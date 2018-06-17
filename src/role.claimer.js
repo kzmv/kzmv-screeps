@@ -1,22 +1,29 @@
 module.exports = {
     // a function to run the logic for this role
     run: function(creep) {
-        // if in target room
-        if (creep.room.name != creep.memory.targetRoom) {
-            // find exit to target room
+        
+        
 
+        if (creep.room.name != creep.memory.targetRoom) {
             var exit = creep.room.findExitTo(creep.memory.targetRoom);
-            // move to exit
             creep.moveTo(creep.pos.findClosestByRange(exit));
+            
+                    //fix for wall stuck
+            if(creep.pos.x*creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49){
+                creep.moveTo(new RoomPosition(25,25,creep.memory.targetRoom));
+            }
         }
         else {
-            // try to claim controller
-
-            if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                // move towards the controller
-                var path = creep.room.findPath(creep.pos, creep.room.controller,{maxRooms: 1});
-                creep.moveTo(path[0].direction);
+            if(Game.roome.length < Game.gcl){
+                if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.controller);
+                }
+            } else {
+                if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(creep.room.controller);
+                }
             }
+            
         }
     }
 };

@@ -6,7 +6,10 @@ var roleRepairer = require('role.repairer');
 var roleWallRepairer = require('role.wallRepairer');
 var roleCarrier = require('role.carrier');
 var roleClaimer = require('role.claimer');
+var roleORHarvester = require('role.otherRoomHarvester');
+var roleORUpgrader = require('role.otherRoomUpgrader');
 var factory = require('factory');
+
 require('game.helpers');
 /*
     1. CLI
@@ -42,6 +45,12 @@ module.exports.loop = function () {
         }
         else if(creep.memory.role == 'claimer'){
             roleClaimer.run(creep);
+        }
+        else if(creep.memory.role == 'otherRoomHarvester'){
+            roleORHarvester.run(creep);
+        }
+        else if(creep.memory.role == 'otherRoomUpgrader'){
+            roleORUpgrader.run(creep);
         }
     }
 
