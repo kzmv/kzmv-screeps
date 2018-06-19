@@ -6,7 +6,10 @@ var roleRepairer = require('role.repairer');
 var roleWallRepairer = require('role.wallRepairer');
 var roleCarrier = require('role.carrier');
 var roleClaimer = require('role.claimer');
+var roleORHarvester = require('role.otherRoomHarvester');
+var roleORUpgrader = require('role.otherRoomUpgrader');
 var factory = require('factory');
+
 require('game.helpers');
 /*
     1. CLI
@@ -37,23 +40,37 @@ module.exports.loop = function () {
         else if (creep.memory.role == 'carrier') {
             roleCarrier.run(creep);
         }
-        else if(creep.memory.role == 'wallRepairer'){
+        else if (creep.memory.role == 'wallRepairer') {
             roleWallRepairer.run(creep);
         }
-        else if(creep.memory.role == 'claimer'){
+        else if (creep.memory.role == 'claimer') {
             roleClaimer.run(creep);
+        }
+        else if (creep.memory.role == 'otherRoomHarvester') {
+            roleORHarvester.run(creep);
+        }
+        else if (creep.memory.role == 'otherRoomUpgrader') {
+            roleORUpgrader.run(creep);
         }
     }
 
-    factory.run(Game.spawns['Spawn1']);
 
-    var hostiles = Game.rooms["W27N54"].find(FIND_HOSTILE_CREEPS);
-    if(hostiles.length > 0) {
-        var username = hostiles[0].owner.username;
-        Game.notify(`User ${username} spotted in room ${"W27N54"}`);
-        var towers = Game.rooms["W27N54"].find(
-            FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-        towers.forEach(tower => tower.attack(hostiles[0]));
+    for (var roomName of Object.keys(Game.rooms)) {
+        var room = Game.rooms[roomName];
+        var spawn = room.find(FIND_MY_SPAWNS)[0]
+        if(spawn){
+            factory.run(room.find(FIND_MY_SPAWNS)[0]);
+        }
+        
+
+        var hostiles = room.find(FIND_HOSTILE_CREEPS);
+        if (hostiles.length > 0) {
+            var username = hostiles[0].owner.username;
+            Game.notify(`User ${username} spotted in room ${roomName}`);
+            var towers = room.find(
+                FIND_MY_STRUCTURES, { filter: { structureType: STRUCTURE_TOWER } });
+            towers.forEach(tower => tower.attack(hostiles[0]));
+        }
     }
 
 

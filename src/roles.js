@@ -1,49 +1,101 @@
 
 var roles = {
-    harvester: {
-        count: 2,
+    getRoles: function() {return [
+    {
+        count: 8,
+        type: 'harvester',
+        id: 'harvester1',
         name: "Harvester",
-        template: [WORK, WORK , WORK, WORK,  WORK, MOVE, MOVE, MOVE],
-        priority: -11,
+        template: [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        priority: -23,
     },
-    upgrader: {
-        count: 4,
+    {
+        count: 3,
         name: "Upgrader",
-        template: [WORK, WORK,  WORK,  WORK, CARRY,  CARRY, CARRY, CARRY, CARRY,  MOVE, MOVE, MOVE],
-        priority: -9,
+        type: 'upgrader',
+        id: 'upgrader1',
+        template: [WORK, WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        priority: -29,
     },
-    builder: {
+    {
         count: 1,
         name: "Builder",
-        template: [WORK, WORK,  WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE , MOVE ],
-        priority: -4,
+        type: 'builder',
+        id: 'builder1',
+        template: [WORK, WORK, CARRY, MOVE, MOVE],
+        priority: -24,
     },
-    repairer: {
+    {
         count: 1,
         name: "Repairer",
-        template: [WORK, WORK,  WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE , MOVE ],
-        priority: -1,
+        type: 'repairer',
+        id: 'repairer1',
+        template: [WORK,WORK, CARRY, MOVE, MOVE],
+        priority: -23,
     },
-    wallRepairer: {
+    {
+        count: 5,
+        name: "ORHarvester2",
+        type: 'otherRoomHarvester',
+        room: 'W16N42',
+        id: 'otherRoomHarvester2',
+        template: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+        priority: -18,
+    },
+   {
+        count: 5,
+        name: "ORHarvester1",
+        type: 'otherRoomHarvester',
+        room: 'W15N41',
+        id: 'otherRoomHarvester1',
+        template: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+        priority: -17,
+    },
+    {
+        count: 5,
+        name: "ORHarvester3",
+        type: 'otherRoomHarvester',
+        room: 'W14N41',
+        id: 'otherRoomHarvester3',
+        template: [WORK, WORK, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+        priority: -17,
+    },
+    {
         count: 1,
         name: "WallRepairer",
+        type: 'wallRepairer',
+        id: 'wallRepairer1',
         template: [WORK, WORK,  WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE , MOVE ],
-        priority: -1,
+        priority: -8,
     },
-    carrier: {
-        count: 2,
-        name: "Carrier",
-        template: [ CARRY, CARRY, CARRY,CARRY,  MOVE,  MOVE],
-        priority: -12,
+    {
+        count: 0,
+        name: "carrier",
+        type: 'carrier',
+        id: 'carrier1',
+        template: [WORK, CARRY, MOVE],
+        priority: -13,
     },
-    claimer: {
+    {
         count: 1,
         name: "Claimer",
+        type: 'claimer',
+        id: 'claimer1',
         template: [ CLAIM,  MOVE, MOVE],
         priority: 1,
-        room: 'W28N54'
+        room: 'W28N55'
+    },
+    {
+        count: 2,
+        name: "ORUpgrader",
+        type: 'otherRoomUpgrader',
+        id: 'otherRoomUpgrader1',
+        room: 'W15N41',
+        template: [WORK, WORK ,WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+        priority: -9,
     }
     
+    ]}
 }
 
 module.exports = roles;
