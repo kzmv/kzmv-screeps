@@ -1,9 +1,17 @@
 var factory = require('factory');
 module.exports = {
+    isWorking: function (creep){
+        if (creep.memory.working && creep.carry.energy == 0) {
+            creep.memory.working = false;
+        }
+        else if (!creep.memory.working  && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.working = true;
+        }
+    },
     extractFromSource: function (creep) {
         var creepers = _.filter(Game.creeps, (c) => creep.memory.role == c.memory.role);
         if (!creep.memory.sourceId) {
-            creep.memory.sourceId = factory.getSourceId(creep.memory.role, creep.room)
+            creep.memory.sourceId = factory.getSourceId(creep)
         }
         var source = Game.getObjectById(creep.memory.sourceId)
         if (creep.harvest(source) == ERR_NOT_IN_RANGE) {

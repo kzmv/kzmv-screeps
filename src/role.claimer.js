@@ -1,7 +1,12 @@
 module.exports = {
     // a function to run the logic for this role
     run: function(creep) {
-        
+        if (creep.memory.working && creep.carry.energy == 0) {
+            creep.memory.working = false;
+        }
+        else if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.working = true;
+        }
         
 
         if (creep.room.name != creep.memory.targetRoom) {
@@ -14,15 +19,9 @@ module.exports = {
             }
         }
         else {
-            if(Game.roome.length < Game.gcl){
-                if (creep.claimController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(creep.room.controller);
-                }
-            } else {
                 if (creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(creep.room.controller);
                 }
-            }
             
         }
     }

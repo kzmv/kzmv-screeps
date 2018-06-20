@@ -20,7 +20,8 @@ module.exports = {
             }
         }
         else {
-            helper.extractFromContainer(creep);
+                helper.extractFromContainer(creep);
+        
         }
     }
-};
+}

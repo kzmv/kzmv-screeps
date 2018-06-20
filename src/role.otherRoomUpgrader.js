@@ -11,7 +11,6 @@ module.exports = {
         
 
         if(creep.pos.x*creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49){
-            console.log("center hack move");
             if (creep.room.name == creep.memory.home) {
                 creep.moveTo(new RoomPosition(25,25,creep.memory.home));
             } else {

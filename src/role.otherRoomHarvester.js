@@ -11,17 +11,18 @@ module.exports = {
         
 
         if(creep.pos.x*creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49){
-            console.log("center hack move");
             if (creep.room.name == creep.memory.home) {
-                creep.moveTo(new RoomPosition(25,25,creep.memory.home));
+                creep.moveTo(new RoomPosition(25,25,creep.memory.home),{maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' }});
+                creep.moveTo(new RoomPosition(25,25,creep.memory.home),{maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' }});
             } else {
-                creep.moveTo(new RoomPosition(25,25,creep.memory.targetRoom));
+                creep.moveTo(new RoomPosition(25,25,creep.memory.targetRoom),{maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' }});
             }
             
         }
 
         if (creep.memory.working) {
             if (creep.room.name == creep.memory.home) {
+
                 helper.transferToContainer(creep);
             }
             else {
@@ -32,17 +33,17 @@ module.exports = {
                 
                 if (constructionSite != undefined) {
                     if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(constructionSite);
+                        creep.moveTo(constructionSite, { visualizePathStyle: { stroke: '#ffaa00' } });
                     }
                 }
                 else if(repairStructure){
-                    if (creep.repair(repairStructure) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(repairStructure);
-                }
+                    if(creep.repair(repairStructure) == ERR_NOT_IN_RANGE){
+                        creep.moveTo(repairStructure);
+                    }
                 }
                 else {
                     var exit = creep.room.findExitTo(creep.memory.home);
-                    creep.moveTo(creep.pos.findClosestByRange(exit));
+                    creep.moveTo(creep.pos.findClosestByRange(exit), { visualizePathStyle: { stroke: '#ffaa00' } });
                 }
                 
             }
