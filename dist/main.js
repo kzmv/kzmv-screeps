@@ -30,6 +30,24 @@ var __assign = function() {
 
 var roles = [
     {
+        count: 1,
+        type: 'newbieCleaner',
+        id: 'newbieCleaner-W14N42',
+        name: "NewbieCleaner",
+        targetRoom: 'W14N42',
+        template: [ATTACK, ATTACK, ATTACK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        priority: -13,
+    },
+    {
+        count: 1,
+        type: 'newbieCleaner',
+        id: 'newbieCleaner-W17N41',
+        name: "NewbieCleaner",
+        targetRoom: 'W17N41',
+        template: [ATTACK, ATTACK, ATTACK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        priority: -13,
+    },
+    {
         count: 0,
         type: 'harvester',
         id: 'harvester1',
@@ -84,7 +102,7 @@ var roles = [
         targetRoom: 'W16N42',
         id: 'otherRoomHarvester2',
         template: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
-        priority: -18,
+        priority: -15,
     },
     {
         count: 2,
@@ -225,6 +243,16 @@ var getSourcesAcessPoints = function (room) {
 
 var _$2 = require('lodash');
 var creepHelpers = {
+    exitMove: function (creep) {
+        if (creep.pos.x * creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49) {
+            if (creep.room.name == creep.memory.home) {
+                creep.moveTo(new RoomPosition(25, 25, creep.memory.home), { maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' } });
+            }
+            else {
+                creep.moveTo(new RoomPosition(25, 25, creep.memory.targetRoom), { maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' } });
+            }
+        }
+    },
     isWorking: function (creep) {
         if (creep.memory.working && _$2.sum(creep.carry) == 0) {
             creep.memory.working = false;
@@ -301,12 +329,14 @@ var creepHelpers = {
     },
     pickupToumbstones: function (creep) {
         var tombstones = _$2.sortBy(creep.room.find(FIND_TOMBSTONES), function (t) { return creep.pos.getRangeTo(t); });
+        tombstones = tombstones.filter(function (t) { return _$2.sum(t.store) > 0; });
         if (tombstones.length > 0) {
-            if (creep.withdraw(tombstones[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(tombstones[0], { visualizePathStyle: { stroke: '#ffaa00' } });
-            }
+            for (var resource in tombstones[0].store)
+                if (creep.withdraw(tombstones[0], resource) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(tombstones[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+                }
         }
-    },
+    }
 };
 
 var roleHarvester = {
@@ -351,7 +381,12 @@ var roleUpgrader = {
             }
         }
         else {
-            creepHelpers.extractFromContainer(creep);
+            if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
+                creepHelpers.pickupResources(creep);
+            }
+            else {
+                creepHelpers.extractFromContainer(creep);
+            }
         }
     }
 };
@@ -466,24 +501,22 @@ var roleCarrier = {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             }
-            // if(_.sum(creep.carry) > 0){
-            //     targets = creep.room.find(FIND_STRUCTURES, {
-            //         filter: (structure) => {
-            //             return (
-            //                 structure.structureType == STRUCTURE_STORAGE) ;
-            //         }
-            //     });
-            //         //for each mineral try to transfer
-            //      if(creep.transfer(targets[0], RESOURCE_KEANIUM_OXIDE) == ERR_NOT_IN_RANGE) {
-            //         creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
-            //     }
-            // }
+            if (creep.carry.GO) {
+                targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: function (structure) {
+                        return (structure.structureType == STRUCTURE_STORAGE);
+                    }
+                });
+                if (creep.transfer(targets[0], RESOURCE_GHODIUM_OXIDE) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
+                }
+            }
         }
         else {
             if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
                 creepHelpers.pickupResources(creep);
             }
-            else if (creep.room.find(FIND_TOMBSTONES).length > 0) {
+            else if (creep.room.find(FIND_TOMBSTONES).filter(function (t) { return _$3.sum(t.store) > 0; }).length > 0) {
                 creepHelpers.pickupToumbstones(creep);
             }
             else {
@@ -496,12 +529,8 @@ var roleCarrier = {
 var roleClaimer = {
     // a function to run the logic for this role
     run: function (creep) {
-        if (creep.memory.working && creep.carry.energy == 0) {
-            creep.memory.working = false;
-        }
-        else if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.working = true;
-        }
+        creepHelpers.isWorking(creep);
+        creepHelpers.exitMove(creep);
         if (creep.room.name != creep.memory.targetRoom) {
             var exit = creep.room.findExitTo(creep.memory.targetRoom);
             creep.moveTo(creep.pos.findClosestByRange(exit));
@@ -516,21 +545,8 @@ var roleClaimer = {
 
 var roleORHarvester = {
     run: function (creep) {
-        if (creep.memory.working && creep.carry.energy == 0) {
-            creep.memory.working = false;
-        }
-        else if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.working = true;
-        }
-        if (creep.pos.x * creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49) {
-            if (creep.room.name == creep.memory.home) {
-                creep.moveTo(new RoomPosition(25, 25, creep.memory.home), { maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' } });
-                creep.moveTo(new RoomPosition(25, 25, creep.memory.home), { maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' } });
-            }
-            else {
-                creep.moveTo(new RoomPosition(25, 25, creep.memory.targetRoom), { maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' } });
-            }
-        }
+        creepHelpers.isWorking(creep);
+        creepHelpers.exitMove(creep);
         if (creep.memory.working) {
             if (creep.room.name == creep.memory.home) {
                 creepHelpers.transferToContainer(creep);
@@ -570,20 +586,8 @@ var roleORHarvester = {
 
 var roleORUpgrader = {
     run: function (creep) {
-        if (creep.memory.working && creep.carry.energy == 0) {
-            creep.memory.working = false;
-        }
-        else if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.working = true;
-        }
-        if (creep.pos.x * creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49) {
-            if (creep.room.name == creep.memory.home) {
-                creep.moveTo(new RoomPosition(25, 25, creep.memory.home));
-            }
-            else {
-                creep.moveTo(new RoomPosition(25, 25, creep.memory.targetRoom));
-            }
-        }
+        creepHelpers.isWorking(creep);
+        creepHelpers.exitMove(creep);
         if (creep.memory.working) {
             if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(creep.room.controller);
@@ -592,6 +596,58 @@ var roleORUpgrader = {
         else {
             if (creep.room.name == creep.memory.targetRoom) {
                 creepHelpers.extractFromSource(creep);
+            }
+            else {
+                var exit = creep.room.findExitTo(creep.memory.targetRoom);
+                creep.moveTo(creep.pos.findClosestByRange(exit));
+            }
+        }
+    }
+};
+
+var roleNewbieCleaner = {
+    // a function to run the logic for this role
+    run: function (creep) {
+        creepHelpers.isWorking(creep);
+        creepHelpers.exitMove(creep);
+        if (creep.memory.working) {
+            if (creep.room.name == creep.memory.home) {
+                creepHelpers.transferToContainer(creep);
+            }
+            else {
+                var exit = creep.room.findExitTo(creep.memory.home);
+                creep.moveTo(creep.pos.findClosestByRange(exit), { visualizePathStyle: { stroke: '#ffaa00' } });
+            }
+        }
+        else {
+            if (creep.room.name == creep.memory.targetRoom) {
+                var hostiles = _.sortBy(creep.room.find(FIND_HOSTILE_CREEPS), function (c) { return creep.pos.getRangeTo(c); });
+                var hostileStructs = _.sortBy(creep.room.find(FIND_HOSTILE_STRUCTURES), function (c) { return creep.pos.getRangeTo(c); }).filter(function (s) { return s.structureType !== STRUCTURE_CONTROLLER; });
+                var controller = _.sortBy(creep.room.find(FIND_HOSTILE_STRUCTURES), function (c) { return creep.pos.getRangeTo(c); }).filter(function (s) { return s.structureType == STRUCTURE_CONTROLLER; })[0];
+                if (creep.room.find(FIND_TOMBSTONES).filter(function (t) { return _.sum(t.store) > 0; }).length > 0) {
+                    creepHelpers.pickupToumbstones(creep);
+                }
+                else if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
+                    creepHelpers.pickupResources(creep);
+                }
+                else if (hostiles.length > 0) {
+                    if (creep.attack(hostiles[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(hostiles[0].pos);
+                    }
+                }
+                else if (hostileStructs.length > 0) {
+                    if (creep.attack(hostileStructs[0]) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(hostileStructs[0].pos);
+                    }
+                }
+                else if (controller) {
+                    if (creep.attackController(controller) == ERR_NOT_IN_RANGE) {
+                        creep.moveTo(controller.pos);
+                    }
+                }
+                else {
+                    creep.memory.working = true;
+                }
             }
             else {
                 var exit = creep.room.findExitTo(creep.memory.targetRoom);
@@ -3021,6 +3077,9 @@ var loop = ErrorMapper.wrapLoop(function () {
         }
         else if (creep.memory.role == 'otherRoomUpgrader') {
             roleORUpgrader.run(creep);
+        }
+        else if (creep.memory.role == 'newbieCleaner') {
+            roleNewbieCleaner.run(creep);
         }
     }
     for (var _i = 0, _a = Object.keys(Game.rooms); _i < _a.length; _i++) {

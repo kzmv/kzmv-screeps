@@ -2,23 +2,8 @@ import {creepHelpers} from 'helpers.role';
 
 export const roleORHarvester = {
     run: (creep: Creep) => {
-        if (creep.memory.working && creep.carry.energy == 0) {
-            creep.memory.working = false;
-        }
-        else if (!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.working = true;
-        }
-        
-
-        if(creep.pos.x*creep.pos.y === 0 || creep.pos.x === 49 || creep.pos.y === 49){
-            if (creep.room.name == creep.memory.home) {
-                creep.moveTo(new RoomPosition(25,25,creep.memory.home),{maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' }});
-                creep.moveTo(new RoomPosition(25,25,creep.memory.home),{maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' }});
-            } else {
-                creep.moveTo(new RoomPosition(25,25,creep.memory.targetRoom as string),{maxRooms: 1, visualizePathStyle: { stroke: '#ffaa00' }});
-            }
-            
-        }
+        creepHelpers.isWorking(creep)
+        creepHelpers.exitMove(creep);
 
         if (creep.memory.working) {
             if (creep.room.name == creep.memory.home) {

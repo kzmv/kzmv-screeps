@@ -12,6 +12,24 @@ export interface CreepRole {
 
 export const roles: CreepRole[] = [
     {
+        count: 1,
+        type: 'newbieCleaner',
+        id: 'newbieCleaner-W14N42',
+        name: "NewbieCleaner",
+        targetRoom: 'W14N42',
+        template: [ATTACK, ATTACK, ATTACK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE , MOVE],
+        priority: -13,
+    },
+    {
+        count: 1,
+        type: 'newbieCleaner',
+        id: 'newbieCleaner-W17N41',
+        name: "NewbieCleaner",
+        targetRoom: 'W17N41',
+        template: [ATTACK, ATTACK, ATTACK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE , MOVE],
+        priority: -13,
+    },
+    {
         count: 0,
         type: 'harvester',
         id: 'harvester1',
@@ -66,7 +84,7 @@ export const roles: CreepRole[] = [
         targetRoom: 'W16N42',
         id: 'otherRoomHarvester2',
         template: [WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
-        priority: -18,
+        priority: -15,
     },
     {
         count: 2,

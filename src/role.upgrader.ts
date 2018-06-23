@@ -18,8 +18,11 @@ export const roleUpgrader = {
         }
         else {
 
-
-            creepHelpers.extractFromContainer(creep);
+            if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
+                creepHelpers.pickupResources(creep);
+            } else {
+                creepHelpers.extractFromContainer(creep);
+            }
             
         }
     }

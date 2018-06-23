@@ -9,7 +9,9 @@ import {roleCarrier} from 'role.carrier';
 import {roleClaimer} from 'role.claimer';
 import {roleORHarvester} from 'role.otherRoomHarvester';
 import {roleORUpgrader} from 'role.otherRoomUpgrader';
+import {roleNewbieCleaner} from 'role.newbieCleaner';
 import {factory} from 'factory';
+
 
 /*
     1. CLI
@@ -28,7 +30,7 @@ import { ErrorMapper } from "utils/ErrorMapper";
 export const loop = ErrorMapper.wrapLoop(() => {
     for (let name in Game.creeps) {
         var creep = Game.creeps[name];
-
+        
         if (creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
         }
@@ -58,6 +60,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
         }
         else if (creep.memory.role == 'otherRoomUpgrader') {
             roleORUpgrader.run(creep);
+        } else if(creep.memory.role == 'newbieCleaner') {
+            roleNewbieCleaner.run(creep);
         }
     }
 

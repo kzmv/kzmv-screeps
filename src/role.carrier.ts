@@ -31,24 +31,23 @@ export const roleCarrier = {
                     creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
             }
-            // if(_.sum(creep.carry) > 0){
-            //     targets = creep.room.find(FIND_STRUCTURES, {
-            //         filter: (structure) => {
-            //             return (
-            //                 structure.structureType == STRUCTURE_STORAGE) ;
-            //         }
-            //     });
 
-            //         //for each mineral try to transfer
-            //      if(creep.transfer(targets[0], RESOURCE_KEANIUM_OXIDE) == ERR_NOT_IN_RANGE) {
-            //         creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
-            //     }
-            // }
+            if(creep.carry.GO){
+                targets = creep.room.find(FIND_STRUCTURES, {
+                    filter: (structure) => {
+                        return (
+                            structure.structureType == STRUCTURE_STORAGE) ;
+                    }
+                });
+                if(creep.transfer(targets[0], RESOURCE_GHODIUM_OXIDE) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
+                }
+            }
         }
         else {
             if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
                 creepHelpers.pickupResources(creep);
-            } else if(creep.room.find(FIND_TOMBSTONES).length > 0) {
+            } else if(creep.room.find(FIND_TOMBSTONES).filter(t => _.sum(t.store)>0).length > 0) {
                 creepHelpers.pickupToumbstones(creep);
 
             } else {
