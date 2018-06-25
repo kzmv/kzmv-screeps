@@ -18,7 +18,7 @@ export const roleUpgrader = {
         }
         else {
 
-            if (creep.room.find(FIND_DROPPED_RESOURCES).length > 0) {
+            if (creep.room.find(FIND_DROPPED_RESOURCES).filter(r => r.amount > 50).length > 0) {
                 creepHelpers.pickupResources(creep);
             } else {
                 creepHelpers.extractFromContainer(creep);

@@ -15,22 +15,7 @@ export const roleORHarvester = {
                 var repairStructure: AnyStructure = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                     filter: (s) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL  && s.structureType != STRUCTURE_RAMPART
                 });
-                
-                if (constructionSite) {
-                    if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(constructionSite, { visualizePathStyle: { stroke: '#ffaa00' } });
-                    }
-                }
-                else if(repairStructure){
-                    if(creep.repair(repairStructure) == ERR_NOT_IN_RANGE){
-                        creep.moveTo(repairStructure);
-                    }
-                }
-                else {
-                    var exit:any = creep.room.findExitTo(creep.memory.home);
-                    creep.moveTo(creep.pos.findClosestByRange(exit), { visualizePathStyle: { stroke: '#ffaa00' } });
-                }
-                
+                let activities = creepHelpers.build(creep) || creepHelpers.scanRepair(creep) || creepHelpers.exitHome(creep);
             }
         }
         else {

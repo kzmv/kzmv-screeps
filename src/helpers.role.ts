@@ -21,6 +21,33 @@ export const creepHelpers = {
             creep.memory.working = true;
         }
     },
+    build: (creep: Creep): boolean => {
+        var constructionSite: ConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
+        if (constructionSite) {
+            if (creep.build(constructionSite) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(constructionSite);
+            }
+            return true;
+        }
+        return false;
+    },
+    scanRepair: (creep: Creep): boolean => {
+        var structures: Structure[] = creep.pos.findInRange(FIND_STRUCTURES, 3, {
+            filter: (s: Structure) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL  && s.structureType != STRUCTURE_RAMPART
+        });
+        if (structures.length > 0) {
+            if (creep.repair(structures[0]) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(structures[0]);
+            }
+            return true;
+        }
+        return false;
+    },
+    exitHome: (creep: Creep): boolean => {
+        var exit:any = creep.room.findExitTo(creep.memory.home);
+        creep.moveTo(creep.pos.findClosestByRange(exit), { visualizePathStyle: { stroke: '#ffaa00' } });
+        return true;
+    },
     extractFromSource: function (creep: Creep) {
         var creepers = _.filter(Game.creeps, (c: Creep) => creep.memory.id == c.memory.id);
         if (!creep.memory.sourceId) {
@@ -79,9 +106,8 @@ export const creepHelpers = {
         }
     },
     pickupResources: function (creep: Creep) {
-        var droppedResources: Resource[] = _.sortBy(creep.room.find(FIND_DROPPED_RESOURCES), (r: Resource) => creep.pos.getRangeTo(r));
+        var droppedResources: Resource[] = _.sortBy(creep.room.find(FIND_DROPPED_RESOURCES).filter(r => r.amount > 50), (r: Resource) => creep.pos.getRangeTo(r));
         if (droppedResources.length > 0) {
-
             if (creep.pickup(droppedResources[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(droppedResources[0], { visualizePathStyle: { stroke: '#ffaa00' } })
             }
