@@ -8,7 +8,7 @@ export const roleORHarvester = {
         if (creep.memory.working) {
             if (creep.room.name == creep.memory.home) {
 
-                creepHelpers.transferToContainer(creep);
+                creepHelpers.transferToSpawn(creep);
             }
             else {
                 var constructionSite: ConstructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);

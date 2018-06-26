@@ -24,7 +24,7 @@ export const roleRepairer = {
             }
         }
         else {
-            creepHelpers.extractFromContainer(creep);
+            creepHelpers.extractFromStorage(creep);
         }
     }
 };

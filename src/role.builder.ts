@@ -21,7 +21,7 @@ export const roleBuilder = {
             }
         }
         else {
-                creepHelpers.extractFromContainer(creep);
+                creepHelpers.extractFromStorage(creep);
         
         }
     }

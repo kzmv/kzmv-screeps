@@ -2,7 +2,8 @@
 import {roleRepairer} from 'role.repairer'
 import {creepHelpers} from 'helpers.role';
 
-var percentage = 0.000100;
+var percentageW = 0.000100;
+var percentageR = 0.001000;
 export const roleWallRepairer = {
     run: (creep: Creep) => {
         if (creep.memory.working == true && creep.carry.energy == 0) {
@@ -17,11 +18,14 @@ export const roleWallRepairer = {
             });
 
             var target = creep.pos.findClosestByPath(walls, {
-                filter: (s: Structure) =>{ 
-                    return s.hits / s.hitsMax < percentage }
+                filter: (s: Structure) =>{
+                    if(s.structureType == STRUCTURE_RAMPART){
+                        return  s.hits / s.hitsMax < percentageR
+                    } 
+                    return s.hits / s.hitsMax < percentageW }
             });
 
-            if (target != undefined) {
+            if (target) {
                 if (creep.repair(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
@@ -31,7 +35,7 @@ export const roleWallRepairer = {
             }
         }
         else {
-            creepHelpers.extractFromContainer(creep);
+            creepHelpers.extractFromStorage(creep);
         }
     }
 };

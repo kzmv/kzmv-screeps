@@ -32,10 +32,10 @@ var roles = [
     {
         count: 0,
         type: 'newbieCleaner',
-        id: 'newbieCleaner-W14N42',
+        id: 'newbieCleaner-W17N42',
         name: "NewbieCleaner",
-        targetRoom: 'W14N42',
-        template: [ATTACK, ATTACK, ATTACK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        targetRoom: 'W17N42',
+        template: [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
         priority: -13,
     },
     {
@@ -60,27 +60,27 @@ var roles = [
         type: 'harvesterPassive',
         id: 'harvesterPassive1',
         name: "HarvesterPassive",
-        template: [WORK, WORK, WORK, WORK, WORK, MOVE, MOVE],
+        template: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE],
         priority: -30,
     },
     {
-        count: 2,
+        count: 3,
         name: "carrier",
         type: 'carrier',
         id: 'carrier1',
-        template: [WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+        template: [WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
         priority: -31,
     },
     {
-        count: 4,
+        count: 1,
         name: "Upgrader",
         type: 'upgrader',
         id: 'upgrader1',
-        template: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+        template: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
         priority: -23,
     },
     {
-        count: 2,
+        count: 1,
         name: "Builder",
         type: 'builder',
         id: 'builder1',
@@ -104,7 +104,7 @@ var roles = [
         priority: -19,
     },
     {
-        count: 2,
+        count: 3,
         name: "ORHarvesterW15N41",
         type: 'otherRoomHarvester',
         targetRoom: 'W15N41',
@@ -113,7 +113,7 @@ var roles = [
         priority: -17,
     },
     {
-        count: 1,
+        count: 3,
         name: "ORHarvesterW16N42",
         type: 'otherRoomHarvester',
         targetRoom: 'W16N42',
@@ -122,13 +122,40 @@ var roles = [
         priority: -15,
     },
     {
-        count: 2,
+        count: 3,
         name: "ORHarvester-W17N41",
         type: 'otherRoomHarvester',
         targetRoom: 'W17N41',
         id: 'otherRoomHarvester-W17N41',
         template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
         priority: -17,
+    },
+    {
+        count: 3,
+        name: "ORHarvester-W14N41",
+        type: 'otherRoomHarvester',
+        targetRoom: 'W14N41',
+        id: 'otherRoomHarvester-W14N41',
+        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        priority: -17,
+    },
+    {
+        count: 0,
+        name: "ORHarvester-W17N42",
+        type: 'otherRoomHarvester',
+        targetRoom: 'W17N42',
+        id: 'otherRoomHarvester-W17N42',
+        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        priority: -17,
+    },
+    {
+        count: 0,
+        name: "ClaimerW17N42",
+        type: 'claimer',
+        id: 'claimer-W17N42',
+        template: [CLAIM, CLAIM, MOVE, MOVE],
+        priority: 1,
+        targetRoom: 'W17N42'
     },
     {
         count: 1,
@@ -156,6 +183,15 @@ var roles = [
         template: [CLAIM, CLAIM, MOVE, MOVE],
         priority: 1,
         targetRoom: 'W17N41'
+    },
+    {
+        count: 1,
+        name: "ClaimerW14N41",
+        type: 'claimer',
+        id: 'claimerW14N41',
+        template: [CLAIM, CLAIM, MOVE, MOVE],
+        priority: 1,
+        targetRoom: 'W14N41'
     },
     {
         count: 0,
@@ -298,11 +334,11 @@ var creepHelpers = {
             creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
         }
     },
-    extractFromContainer: function (creep) {
+    extractFromStorage: function (creep) {
         var creepers = _$2.filter(Game.creeps, function (c) { return creep.memory.role == c.memory.role; });
         if (!creep.memory.containerId) {
             var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: function (s) { return (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) && s.store[RESOURCE_ENERGY] > 0; }
+                filter: function (s) { return (s.structureType == STRUCTURE_STORAGE) && s.store[RESOURCE_ENERGY] > 0; }
             });
             if (targets.length > 0) {
                 targets = _$2.sortBy(targets, function (s) { return creep.pos.getRangeTo(s); });
@@ -317,6 +353,52 @@ var creepHelpers = {
             }
             else if (op == OK) {
                 creep.memory.containerId = undefined;
+            }
+        }
+    },
+    extractFromContainer: function (creep) {
+        var creepers = _$2.filter(Game.creeps, function (c) { return creep.memory.role == c.memory.role; });
+        if (!creep.memory.containerId) {
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: function (s) { return (s.structureType == STRUCTURE_CONTAINER) && s.store[RESOURCE_ENERGY] > 0; }
+            });
+            if (targets.length > 0) {
+                targets = _$2.sortBy(targets, function (s) { return creep.pos.getRangeTo(s); });
+                creep.memory.containerId = targets[0].id;
+            }
+        }
+        var target = Game.getObjectById(creep.memory.containerId);
+        if (target) {
+            var op = creep.withdraw(target, RESOURCE_ENERGY);
+            if (op == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } });
+            }
+            else if (op == OK) {
+                creep.memory.containerId = undefined;
+            }
+        }
+    },
+    extractFromLink: function (creep) {
+        var targets = creep.room.find(FIND_STRUCTURES, {
+            filter: function (s) { return (s.structureType == STRUCTURE_LINK) && s.energy > 0; }
+        });
+        targets = _$2.sortBy(targets, function (s) { return creep.pos.getRangeTo(s); });
+        if (targets.length > 0) {
+            var op = creep.withdraw(targets[0], RESOURCE_ENERGY);
+            if (op == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } });
+            }
+        }
+    },
+    transferToLink: function (creep) {
+        var targets = creep.room.find(FIND_STRUCTURES, {
+            filter: function (s) { return (s.structureType == STRUCTURE_LINK) && s.id != '5b31532de138f1407a68c4d6' && s.energy < s.energyCapacity; }
+        });
+        targets = _$2.sortBy(targets, function (s) { return creep.pos.getRangeTo(s); });
+        if (targets.length > 0) {
+            var op = creep.transfer(targets[0], RESOURCE_ENERGY);
+            if (op == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } });
             }
         }
     },
@@ -390,6 +472,9 @@ var roleHarvester = {
 
 var roleHarvesterPassive = {
     run: function (creep) {
+        if (_.sum(creep.carry) == creep.carryCapacity) {
+            creepHelpers.transferToLink(creep);
+        }
         creepHelpers.extractFromSource(creep);
     }
 };
@@ -408,12 +493,7 @@ var roleUpgrader = {
             }
         }
         else {
-            if (creep.room.find(FIND_DROPPED_RESOURCES).filter(function (r) { return r.amount > 50; }).length > 0) {
-                creepHelpers.pickupResources(creep);
-            }
-            else {
-                creepHelpers.extractFromContainer(creep);
-            }
+            creepHelpers.extractFromLink(creep);
         }
     }
 };
@@ -438,7 +518,7 @@ var roleBuilder = {
             }
         }
         else {
-            creepHelpers.extractFromContainer(creep);
+            creepHelpers.extractFromStorage(creep);
         }
     }
 };
@@ -465,12 +545,13 @@ var roleRepairer = {
             }
         }
         else {
-            creepHelpers.extractFromContainer(creep);
+            creepHelpers.extractFromStorage(creep);
         }
     }
 };
 
-var percentage = 0.000100;
+var percentageW = 0.000100;
+var percentageR = 0.001000;
 var roleWallRepairer = {
     run: function (creep) {
         if (creep.memory.working == true && creep.carry.energy == 0) {
@@ -485,10 +566,13 @@ var roleWallRepairer = {
             });
             var target = creep.pos.findClosestByPath(walls, {
                 filter: function (s) {
-                    return s.hits / s.hitsMax < percentage;
+                    if (s.structureType == STRUCTURE_RAMPART) {
+                        return s.hits / s.hitsMax < percentageR;
+                    }
+                    return s.hits / s.hitsMax < percentageW;
                 }
             });
-            if (target != undefined) {
+            if (target) {
                 if (creep.repair(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target);
                 }
@@ -498,7 +582,7 @@ var roleWallRepairer = {
             }
         }
         else {
-            creepHelpers.extractFromContainer(creep);
+            creepHelpers.extractFromStorage(creep);
         }
     }
 };
@@ -516,6 +600,7 @@ var roleCarrier = {
                 }
             });
             if (targets.length == 0) {
+                //leave at storage
                 targets = creep.room.find(FIND_STRUCTURES, {
                     filter: function (structure) {
                         return (structure.structureType == STRUCTURE_STORAGE);
@@ -528,6 +613,7 @@ var roleCarrier = {
                     creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffffff' } });
                 }
             }
+            //minerals carry
             for (var res in creep.carry) {
                 res = res;
                 if (res != RESOURCE_ENERGY && creep.carry[res]) {
@@ -543,11 +629,11 @@ var roleCarrier = {
             }
         }
         else {
-            if (creep.room.find(FIND_DROPPED_RESOURCES).filter(function (r) { return r.amount > 50; }).length > 0) {
-                creepHelpers.pickupResources(creep);
-            }
-            else if (creep.room.find(FIND_TOMBSTONES).filter(function (t) { return _$3.sum(t.store) > 0; }).length > 0) {
+            if (creep.room.find(FIND_TOMBSTONES).filter(function (t) { return _$3.sum(t.store) > 0; }).length > 0) {
                 creepHelpers.pickupToumbstones(creep);
+            }
+            else if (creep.room.find(FIND_DROPPED_RESOURCES).filter(function (r) { return r.amount > 50; }).length > 0) {
+                creepHelpers.pickupResources(creep);
             }
             else {
                 creepHelpers.extractFromContainer(creep);
@@ -579,7 +665,7 @@ var roleORHarvester = {
         creepHelpers.exitMove(creep);
         if (creep.memory.working) {
             if (creep.room.name == creep.memory.home) {
-                creepHelpers.transferToContainer(creep);
+                creepHelpers.transferToSpawn(creep);
             }
             else {
                 var constructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
@@ -3060,6 +3146,15 @@ var ErrorMapper = /** @class */ (function () {
 }());
 
 // import modules
+var linkConfigs = [
+    {
+        room: 'W16N41',
+        fromX: 14,
+        fromY: 44,
+        toX: 22,
+        toY: 29
+    }
+];
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 var loop = ErrorMapper.wrapLoop(function () {
@@ -3115,6 +3210,14 @@ var loop = ErrorMapper.wrapLoop(function () {
                 var tower = towers_1[_b];
                 tower.attack(hostiles[0]);
             }
+        }
+    }
+    for (var _c = 0, linkConfigs_1 = linkConfigs; _c < linkConfigs_1.length; _c++) {
+        var link = linkConfigs_1[_c];
+        var linkFrom = Game.rooms[link.room].lookForAt('structure', link.fromX, link.fromY).filter(function (s) { return s.structureType == STRUCTURE_LINK; })[0];
+        if (linkFrom.energy == linkFrom.energyCapacity) {
+            var linkTo = Game.rooms[link.room].lookForAt('structure', link.toX, link.toY).filter(function (s) { return s.structureType == STRUCTURE_LINK; })[0];
+            linkFrom.transferEnergy(linkTo);
         }
     }
 });

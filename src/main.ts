@@ -25,6 +25,24 @@ import {factory} from 'factory';
 */
 import { ErrorMapper } from "utils/ErrorMapper";
 
+interface LinkConfig {
+    room: string;
+    fromX: number;
+    fromY: number;
+    toX: number;
+    toY: number;
+}
+
+let linkConfigs: LinkConfig[] = [
+    {
+        room: 'W16N41',
+        fromX: 14,
+        fromY: 44,
+        toX: 22,
+        toY: 29
+    }
+]
+
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
@@ -86,4 +104,16 @@ export const loop = ErrorMapper.wrapLoop(() => {
             
         }
     }
+
+    for(let link of linkConfigs){
+        const linkFrom = Game.rooms[link.room].lookForAt('structure', link.fromX, link.fromY).filter(s => s.structureType == STRUCTURE_LINK)[0] as StructureLink;
+        
+        if(linkFrom.energy == linkFrom.energyCapacity){
+            const linkTo = Game.rooms[link.room].lookForAt('structure', link.toX, link.toY).filter(s => s.structureType == STRUCTURE_LINK)[0] as StructureLink;
+            linkFrom.transferEnergy(linkTo);
+        }
+
+        
+    }
+    
 });

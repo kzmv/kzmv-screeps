@@ -33,7 +33,7 @@ export const creepHelpers = {
     },
     scanRepair: (creep: Creep): boolean => {
         var structures: Structure[] = creep.pos.findInRange(FIND_STRUCTURES, 3, {
-            filter: (s: Structure) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL  && s.structureType != STRUCTURE_RAMPART
+            filter: (s: Structure) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL && s.structureType != STRUCTURE_RAMPART
         });
         if (structures.length > 0) {
             if (creep.repair(structures[0]) == ERR_NOT_IN_RANGE) {
@@ -44,7 +44,7 @@ export const creepHelpers = {
         return false;
     },
     exitHome: (creep: Creep): boolean => {
-        var exit:any = creep.room.findExitTo(creep.memory.home);
+        var exit: any = creep.room.findExitTo(creep.memory.home);
         creep.moveTo(creep.pos.findClosestByRange(exit), { visualizePathStyle: { stroke: '#ffaa00' } });
         return true;
     },
@@ -58,18 +58,38 @@ export const creepHelpers = {
             creep.moveTo(source, { visualizePathStyle: { stroke: '#ffaa00' } });
         }
     },
-    extractFromContainer: function (creep: Creep) {
+    extractFromStorage: function (creep: Creep) {
         var creepers = _.filter(Game.creeps, (c: Creep) => creep.memory.role == c.memory.role);
         if (!creep.memory.containerId) {
             var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (s) => (s.structureType == STRUCTURE_CONTAINER || s.structureType == STRUCTURE_STORAGE) && s.store[RESOURCE_ENERGY] > 0
+                filter: (s) => (s.structureType == STRUCTURE_STORAGE ) && s.store[RESOURCE_ENERGY] > 0
             });
             if (targets.length > 0) {
                 targets = _.sortBy(targets, (s: Structure) => creep.pos.getRangeTo(s))
                 creep.memory.containerId = targets[0].id;
             }
         }
-
+        var target: StructureStorage | null = Game.getObjectById(creep.memory.containerId);
+        if (target) {
+            var op = creep.withdraw(target, RESOURCE_ENERGY)
+            if (op == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } })
+            } else if (op == OK) {
+                creep.memory.containerId = undefined;
+            }
+        }
+    },
+    extractFromContainer: function (creep: Creep) {
+        var creepers = _.filter(Game.creeps, (c: Creep) => creep.memory.role == c.memory.role);
+        if (!creep.memory.containerId) {
+            var targets = creep.room.find(FIND_STRUCTURES, {
+                filter: (s) => (s.structureType == STRUCTURE_CONTAINER ) && s.store[RESOURCE_ENERGY] > 0
+            });
+            if (targets.length > 0) {
+                targets = _.sortBy(targets, (s: Structure) => creep.pos.getRangeTo(s))
+                creep.memory.containerId = targets[0].id;
+            }
+        }
         var target: StructureContainer | null = Game.getObjectById(creep.memory.containerId);
         if (target) {
             var op = creep.withdraw(target, RESOURCE_ENERGY)
@@ -77,6 +97,31 @@ export const creepHelpers = {
                 creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } })
             } else if (op == OK) {
                 creep.memory.containerId = undefined;
+            }
+        }
+    },
+    extractFromLink: function (creep: Creep) {
+        let targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (s) => (s.structureType == STRUCTURE_LINK) && s.energy > 0
+        });
+        targets = _.sortBy(targets, (s: Structure) => creep.pos.getRangeTo(s));
+        if (targets.length > 0) {
+            var op = creep.withdraw(targets[0], RESOURCE_ENERGY)
+            if (op == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } })
+            }
+        }
+    },
+    transferToLink: function (creep: Creep) {
+        let targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (s) => (s.structureType == STRUCTURE_LINK) && s.id != '5b31532de138f1407a68c4d6' && s.energy < s.energyCapacity 
+        });
+        targets = _.sortBy(targets, (s: Structure) => creep.pos.getRangeTo(s));
+
+        if (targets.length > 0) {
+            var op = creep.transfer(targets[0], RESOURCE_ENERGY)
+            if (op == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } })
             }
         }
     },
