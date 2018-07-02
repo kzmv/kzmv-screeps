@@ -8,22 +8,24 @@ import {roleWallRepairer} from 'role.wallRepairer';
 import {roleCarrier} from 'role.carrier';
 import {roleClaimer} from 'role.claimer';
 import {roleORHarvester} from 'role.otherRoomHarvester';
-import {roleORUpgrader} from 'role.otherRoomUpgrader';
 import {roleNewbieCleaner} from 'role.newbieCleaner';
 import {factory} from 'factory';
 
 
 /*
-    1. CLI
-    - Ataccker
-    2. Optimize Role Helper and Roles
-    6. Wall Builder
-    7. Scan Repair
-    8. Scan pickup
-    - carrier resources
+    1. main roles refactoring
+    2. Labs
+    3. miner
+    5. Defenrer creeps ( test sym )
+    6. Atacker Creep ( test sym )
+    7. 
+
+
+    
     
 */
 import { ErrorMapper } from "utils/ErrorMapper";
+import { roleCarrierMain } from 'role.carrierMain';
 
 interface LinkConfig {
     room: string;
@@ -43,44 +45,26 @@ let linkConfigs: LinkConfig[] = [
     }
 ]
 
+let roleRunMap: any = {
+    "harvester": roleHarvester,
+    "harvesterPassive": roleHarvesterPassive,
+    "upgrader": roleUpgrader,
+    "claimer": roleClaimer,
+    "builder": roleBuilder,
+    "carrier": roleCarrier,
+    "carrierMain": roleCarrierMain,
+    "repairer": roleRepairer,
+    "wallRepairer": roleWallRepairer,
+    "otherRoomHarvester": roleORHarvester,
+    "newbieCleaner": roleNewbieCleaner
+}
+
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 export const loop = ErrorMapper.wrapLoop(() => {
     for (let name in Game.creeps) {
         var creep = Game.creeps[name];
-        
-        if (creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        }
-        if (creep.memory.role == 'harvesterPassive') {
-            roleHarvesterPassive.run(creep);
-        }
-        else if (creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
-        else if (creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
-        }
-        else if (creep.memory.role == 'repairer') {
-            roleRepairer.run(creep);
-        }
-        else if (creep.memory.role == 'carrier') {
-            roleCarrier.run(creep);
-        }
-        else if (creep.memory.role == 'wallRepairer') {
-            roleWallRepairer.run(creep);
-        }
-        else if (creep.memory.role == 'claimer') {
-            roleClaimer.run(creep);
-        }
-        else if (creep.memory.role == 'otherRoomHarvester') {
-            roleORHarvester.run(creep);
-        }
-        else if (creep.memory.role == 'otherRoomUpgrader') {
-            roleORUpgrader.run(creep);
-        } else if(creep.memory.role == 'newbieCleaner') {
-            roleNewbieCleaner.run(creep);
-        }
+        roleRunMap[creep.memory.role].run(creep);
     }
 
 
@@ -102,6 +86,12 @@ export const loop = ErrorMapper.wrapLoop(() => {
                 tower.attack(hostiles[0])
             }
             
+        } else {
+            var targets = Game.rooms[roomName].find(FIND_STRUCTURES).filter((s: Structure) => s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL  && s.structureType != STRUCTURE_RAMPART)
+            var towers: any[] = _.filter(Game.structures, (s) => s.structureType === STRUCTURE_TOWER);
+            for(let tower of towers){
+                tower.repair(targets[0])
+            }
         }
     }
 

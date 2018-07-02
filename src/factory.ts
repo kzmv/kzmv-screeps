@@ -24,7 +24,8 @@ export const factory = {
         var role: CreepRole = prioritisedRoles[0];
         if (role) {
             var newName: string = role.name + Game.time;
-            var dryRun = spawner.spawnCreep(role.template, newName, { dryRun: true })
+            var template = generateTemplate(role.template);
+            var dryRun = spawner.spawnCreep(template, newName, { dryRun: true })
             if (dryRun === 0) {
                 console.log('Spawning new ' + role.type + ': ' + newName);
                 var memory: CreepMemory = {
@@ -37,8 +38,8 @@ export const factory = {
                     name: newName
                 }
                 console.log('Memory: ' + memory);
-                console.log('Template: ' + role.template);
-                spawner.spawnCreep(role.template, newName,
+                console.log('Template: ' + template);
+                spawner.spawnCreep(template, newName,
                     { memory: memory });
                 console.log("Next in queue: " + role.type)
                 console.log("Priority queue: " + prioritisedRoles.map(r => r.name));
@@ -55,4 +56,18 @@ export const factory = {
                 { align: 'left', opacity: 0.8 });
         }
     }
+}
+
+export const generateTemplate = (templateMap: any): BodyPartConstant[] => {
+    const bodyParts = Object.keys(templateMap);
+    let template: any[] = [];
+    for(let part of bodyParts){
+        let bodyArr = [];
+        for(let i=0;i< templateMap[part];i++){
+            bodyArr.push(part);
+            BODYPARTS_ALL
+        }
+        template = [...template, ...bodyArr];
+    }
+    return template;
 }

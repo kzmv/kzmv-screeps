@@ -46,7 +46,6 @@ export const getSourceId = (creep: Creep): string => {
     for (let source of sourcesAccessPoints) {
         totalAps += source.ap;
     }
-    var creeps = _.filter(Game.creeps, (c: Creep) => c.memory.id == creep.id);
     sourcesAccessPoints = sourcesAccessPoints.map((s: any) => {
         return { 
             ...s, 

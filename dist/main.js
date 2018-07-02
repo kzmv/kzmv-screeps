@@ -35,16 +35,13 @@ var roles = [
         id: 'newbieCleaner-W17N42',
         name: "NewbieCleaner",
         targetRoom: 'W17N42',
-        template: [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, WORK, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
-        priority: -13,
-    },
-    {
-        count: 0,
-        type: 'newbieCleaner',
-        id: 'newbieCleaner-W17N41',
-        name: "NewbieCleaner",
-        targetRoom: 'W17N41',
-        template: [ATTACK, ATTACK, ATTACK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "tough": 14,
+            "attack": 5,
+            "work": 1,
+            "carry": 2,
+            "move": 4
+        },
         priority: -13,
     },
     {
@@ -52,7 +49,11 @@ var roles = [
         type: 'harvester',
         id: 'harvester1',
         name: "Harvester",
-        template: [WORK, WORK, CARRY, MOVE],
+        template: {
+            "work": 2,
+            "carry": 1,
+            "move": 1
+        },
         priority: -33,
     },
     {
@@ -60,39 +61,81 @@ var roles = [
         type: 'harvesterPassive',
         id: 'harvesterPassive1',
         name: "HarvesterPassive",
-        template: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE],
+        template: {
+            "work": 6,
+            "carry": 1,
+            "move": 2
+        },
         priority: -30,
     },
     {
-        count: 3,
+        count: 2,
         name: "carrier",
         type: 'carrier',
         id: 'carrier1',
-        template: [WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 1,
+            "carry": 6,
+            "move": 4
+        },
         priority: -31,
     },
     {
         count: 1,
-        name: "Upgrader",
-        type: 'upgrader',
-        id: 'upgrader1',
-        template: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
-        priority: -23,
-    },
-    {
-        count: 1,
-        name: "Builder",
-        type: 'builder',
-        id: 'builder1',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+        name: "carrierMain",
+        type: 'carrierMain',
+        id: 'carrierMainMini',
+        template: {
+            "carry": 4,
+            "move": 2
+        },
         priority: -22,
     },
     {
-        count: 1,
+        count: 2,
+        name: "carrierMain",
+        type: 'carrierMain',
+        id: 'carrierMain',
+        template: {
+            "carry": 6,
+            "move": 4
+        },
+        priority: -32,
+    },
+    {
+        count: 2,
+        name: "Upgrader",
+        type: 'upgrader',
+        id: 'upgrader1',
+        template: {
+            "work": 4,
+            "carry": 8,
+            "move": 2
+        },
+        priority: -23,
+    },
+    {
+        count: 2,
+        name: "Builder",
+        type: 'builder',
+        id: 'builder1',
+        template: {
+            "work": 4,
+            "carry": 6,
+            "move": 6
+        },
+        priority: -22,
+    },
+    {
+        count: 0,
         name: "Repairer",
         type: 'repairer',
         id: 'repairer1',
-        template: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        template: {
+            "work": 2,
+            "carry": 4,
+            "move": 4
+        },
         priority: -23,
     },
     {
@@ -100,7 +143,11 @@ var roles = [
         name: "WallRepairer",
         type: 'wallRepairer',
         id: 'wallRepairer1',
-        template: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        template: {
+            "work": 2,
+            "carry": 4,
+            "move": 4
+        },
         priority: -19,
     },
     {
@@ -109,7 +156,11 @@ var roles = [
         type: 'otherRoomHarvester',
         targetRoom: 'W15N41',
         id: 'otherRoomHarvester1',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move": 8
+        },
         priority: -17,
     },
     {
@@ -118,7 +169,11 @@ var roles = [
         type: 'otherRoomHarvester',
         targetRoom: 'W16N42',
         id: 'otherRoomHarvester2',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move": 8
+        },
         priority: -15,
     },
     {
@@ -127,7 +182,11 @@ var roles = [
         type: 'otherRoomHarvester',
         targetRoom: 'W17N41',
         id: 'otherRoomHarvester-W17N41',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move": 8
+        },
         priority: -17,
     },
     {
@@ -136,33 +195,47 @@ var roles = [
         type: 'otherRoomHarvester',
         targetRoom: 'W14N41',
         id: 'otherRoomHarvester-W14N41',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move": 8
+        },
         priority: -17,
     },
     {
-        count: 0,
-        name: "ORHarvester-W17N42",
+        count: 3,
+        name: "ORHarvester-W18N41",
         type: 'otherRoomHarvester',
-        targetRoom: 'W17N42',
-        id: 'otherRoomHarvester-W17N42',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        targetRoom: 'W18N41',
+        id: 'otherRoomHarvester-W18N41',
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move": 8
+        },
         priority: -17,
     },
     {
-        count: 0,
-        name: "ClaimerW17N42",
+        count: 1,
+        name: "ClaimerW18N41",
         type: 'claimer',
-        id: 'claimer-W17N42',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        id: 'claimer-W18N41',
+        template: {
+            "claim": 2,
+            "move": 4
+        },
         priority: 1,
-        targetRoom: 'W17N42'
+        targetRoom: 'W18N41'
     },
     {
         count: 1,
         name: "Claimer",
         type: 'claimer',
         id: 'claimer2',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move": 4
+        },
         priority: -18,
         targetRoom: 'W15N41'
     },
@@ -171,7 +244,10 @@ var roles = [
         name: "Claimer",
         type: 'claimer',
         id: 'claimer1',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move": 4
+        },
         priority: 1,
         targetRoom: 'W16N42'
     },
@@ -180,7 +256,10 @@ var roles = [
         name: "Claimer",
         type: 'claimer',
         id: 'claimerW17N41',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move": 4
+        },
         priority: 1,
         targetRoom: 'W17N41'
     },
@@ -189,19 +268,13 @@ var roles = [
         name: "ClaimerW14N41",
         type: 'claimer',
         id: 'claimerW14N41',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move": 4
+        },
         priority: 1,
         targetRoom: 'W14N41'
     },
-    {
-        count: 0,
-        name: "ORUpgrader",
-        type: 'otherRoomUpgrader',
-        id: 'otherRoomUpgrader1',
-        targetRoom: 'W15N41',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
-        priority: -9,
-    }
 ];
 
 var _$1 = require('lodash');
@@ -250,7 +323,6 @@ var getSourceId = function (creep) {
         var source = sourcesAccessPoints_1[_i];
         totalAps += source.ap;
     }
-    var creeps = _$1.filter(Game.creeps, function (c) { return c.memory.id == creep.id; });
     sourcesAccessPoints = sourcesAccessPoints.map(function (s) {
         return __assign({}, s, { creepCount: Math.round(_$1.find(roles, function (r) { return r.id == creep.memory.id; }).count / (totalAps / s.ap)) });
     });
@@ -335,29 +407,16 @@ var creepHelpers = {
         }
     },
     extractFromStorage: function (creep) {
-        var creepers = _$2.filter(Game.creeps, function (c) { return creep.memory.role == c.memory.role; });
-        if (!creep.memory.containerId) {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: function (s) { return (s.structureType == STRUCTURE_STORAGE) && s.store[RESOURCE_ENERGY] > 0; }
-            });
-            if (targets.length > 0) {
-                targets = _$2.sortBy(targets, function (s) { return creep.pos.getRangeTo(s); });
-                creep.memory.containerId = targets[0].id;
-            }
-        }
-        var target = Game.getObjectById(creep.memory.containerId);
-        if (target) {
-            var op = creep.withdraw(target, RESOURCE_ENERGY);
-            if (op == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } });
-            }
-            else if (op == OK) {
-                creep.memory.containerId = undefined;
+        var targets = creep.room.find(FIND_STRUCTURES, {
+            filter: function (s) { return (s.structureType == STRUCTURE_STORAGE) && s.store[RESOURCE_ENERGY] > 0; }
+        });
+        if (targets.length > 0) {
+            if (creep.withdraw(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } });
             }
         }
     },
     extractFromContainer: function (creep) {
-        var creepers = _$2.filter(Game.creeps, function (c) { return creep.memory.role == c.memory.role; });
         if (!creep.memory.containerId) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: function (s) { return (s.structureType == STRUCTURE_CONTAINER) && s.store[RESOURCE_ENERGY] > 0; }
@@ -594,19 +653,9 @@ var roleCarrier = {
         if (creep.memory.working) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: function (structure) {
-                    return (structure.structureType == STRUCTURE_TOWER ||
-                        structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN) && structure.energy < structure.energyCapacity;
+                    return (structure.structureType == STRUCTURE_STORAGE);
                 }
             });
-            if (targets.length == 0) {
-                //leave at storage
-                targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: function (structure) {
-                        return (structure.structureType == STRUCTURE_STORAGE);
-                    }
-                });
-            }
             targets = _$3.sortBy(targets, function (s) { return creep.pos.getRangeTo(s); });
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
@@ -665,7 +714,7 @@ var roleORHarvester = {
         creepHelpers.exitMove(creep);
         if (creep.memory.working) {
             if (creep.room.name == creep.memory.home) {
-                creepHelpers.transferToSpawn(creep);
+                creepHelpers.transferToContainer(creep);
             }
             else {
                 var constructionSite = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES);
@@ -673,27 +722,6 @@ var roleORHarvester = {
                     filter: function (s) { return s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL && s.structureType != STRUCTURE_RAMPART; }
                 });
                 var activities = creepHelpers.build(creep) || creepHelpers.scanRepair(creep) || creepHelpers.exitHome(creep);
-            }
-        }
-        else {
-            if (creep.room.name == creep.memory.targetRoom) {
-                creepHelpers.extractFromSource(creep);
-            }
-            else {
-                var exit = creep.room.findExitTo(creep.memory.targetRoom);
-                creep.moveTo(creep.pos.findClosestByRange(exit));
-            }
-        }
-    }
-};
-
-var roleORUpgrader = {
-    run: function (creep) {
-        creepHelpers.isWorking(creep);
-        creepHelpers.exitMove(creep);
-        if (creep.memory.working) {
-            if (creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(creep.room.controller);
             }
         }
         else {
@@ -782,7 +810,8 @@ var factory = {
         var role = prioritisedRoles[0];
         if (role) {
             var newName = role.name + Game.time;
-            var dryRun = spawner.spawnCreep(role.template, newName, { dryRun: true });
+            var template = generateTemplate(role.template);
+            var dryRun = spawner.spawnCreep(template, newName, { dryRun: true });
             if (dryRun === 0) {
                 console.log('Spawning new ' + role.type + ': ' + newName);
                 var memory = {
@@ -795,8 +824,8 @@ var factory = {
                     name: newName
                 };
                 console.log('Memory: ' + memory);
-                console.log('Template: ' + role.template);
-                spawner.spawnCreep(role.template, newName, { memory: memory });
+                console.log('Template: ' + template);
+                spawner.spawnCreep(template, newName, { memory: memory });
                 console.log("Next in queue: " + role.type);
                 console.log("Priority queue: " + prioritisedRoles.map(function (r) { return r.name; }));
             }
@@ -806,6 +835,19 @@ var factory = {
             spawner.room.visual.text('Building: ' + spawningCreep.memory.id, spawner.pos.x + 1, spawner.pos.y, { align: 'left', opacity: 0.8 });
         }
     }
+};
+var generateTemplate = function (templateMap) {
+    var bodyParts = Object.keys(templateMap);
+    var template = [];
+    for (var _i = 0, bodyParts_1 = bodyParts; _i < bodyParts_1.length; _i++) {
+        var part = bodyParts_1[_i];
+        var bodyArr = [];
+        for (var i = 0; i < templateMap[part]; i++) {
+            bodyArr.push(part);
+        }
+        template = template.concat(bodyArr);
+    }
+    return template;
 };
 
 /* -*- Mode: js; js-indent-level: 2; -*- */
@@ -3145,6 +3187,19 @@ var ErrorMapper = /** @class */ (function () {
     return ErrorMapper;
 }());
 
+var _$5 = require('lodash');
+var roleCarrierMain = {
+    run: function (creep) {
+        creepHelpers.isWorking(creep);
+        if (creep.memory.working) {
+            creepHelpers.transferToSpawn(creep);
+        }
+        else {
+            creepHelpers.extractFromStorage(creep);
+        }
+    }
+};
+
 // import modules
 var linkConfigs = [
     {
@@ -3155,44 +3210,25 @@ var linkConfigs = [
         toY: 29
     }
 ];
+var roleRunMap = {
+    "harvester": roleHarvester,
+    "harvesterPassive": roleHarvesterPassive,
+    "upgrader": roleUpgrader,
+    "claimer": roleClaimer,
+    "builder": roleBuilder,
+    "carrier": roleCarrier,
+    "carrierMain": roleCarrierMain,
+    "repairer": roleRepairer,
+    "wallRepairer": roleWallRepairer,
+    "otherRoomHarvester": roleORHarvester,
+    "newbieCleaner": roleNewbieCleaner
+};
 // When compiling TS to JS and bundling with rollup, the line numbers and file names in error messages change
 // This utility uses source maps to get the line numbers and file names of the original, TS source code
 var loop = ErrorMapper.wrapLoop(function () {
     for (var name_1 in Game.creeps) {
         var creep = Game.creeps[name_1];
-        if (creep.memory.role == 'harvester') {
-            roleHarvester.run(creep);
-        }
-        if (creep.memory.role == 'harvesterPassive') {
-            roleHarvesterPassive.run(creep);
-        }
-        else if (creep.memory.role == 'upgrader') {
-            roleUpgrader.run(creep);
-        }
-        else if (creep.memory.role == 'builder') {
-            roleBuilder.run(creep);
-        }
-        else if (creep.memory.role == 'repairer') {
-            roleRepairer.run(creep);
-        }
-        else if (creep.memory.role == 'carrier') {
-            roleCarrier.run(creep);
-        }
-        else if (creep.memory.role == 'wallRepairer') {
-            roleWallRepairer.run(creep);
-        }
-        else if (creep.memory.role == 'claimer') {
-            roleClaimer.run(creep);
-        }
-        else if (creep.memory.role == 'otherRoomHarvester') {
-            roleORHarvester.run(creep);
-        }
-        else if (creep.memory.role == 'otherRoomUpgrader') {
-            roleORUpgrader.run(creep);
-        }
-        else if (creep.memory.role == 'newbieCleaner') {
-            roleNewbieCleaner.run(creep);
-        }
+        roleRunMap[creep.memory.role].run(creep);
     }
     for (var _i = 0, _a = Object.keys(Game.rooms); _i < _a.length; _i++) {
         var roomName = _a[_i];
@@ -3211,9 +3247,17 @@ var loop = ErrorMapper.wrapLoop(function () {
                 tower.attack(hostiles[0]);
             }
         }
+        else {
+            var targets = Game.rooms[roomName].find(FIND_STRUCTURES).filter(function (s) { return s.hits < s.hitsMax && s.structureType != STRUCTURE_WALL && s.structureType != STRUCTURE_RAMPART; });
+            var towers = _.filter(Game.structures, function (s) { return s.structureType === STRUCTURE_TOWER; });
+            for (var _c = 0, towers_2 = towers; _c < towers_2.length; _c++) {
+                var tower = towers_2[_c];
+                tower.repair(targets[0]);
+            }
+        }
     }
-    for (var _c = 0, linkConfigs_1 = linkConfigs; _c < linkConfigs_1.length; _c++) {
-        var link = linkConfigs_1[_c];
+    for (var _d = 0, linkConfigs_1 = linkConfigs; _d < linkConfigs_1.length; _d++) {
+        var link = linkConfigs_1[_d];
         var linkFrom = Game.rooms[link.room].lookForAt('structure', link.fromX, link.fromY).filter(function (s) { return s.structureType == STRUCTURE_LINK; })[0];
         if (linkFrom.energy == linkFrom.energyCapacity) {
             var linkTo = Game.rooms[link.room].lookForAt('structure', link.toX, link.toY).filter(function (s) { return s.structureType == STRUCTURE_LINK; })[0];

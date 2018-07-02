@@ -1,4 +1,3 @@
-import { factory } from 'factory';
 import { getSourceId } from 'helpers.game';
 var _ = require('lodash');
 
@@ -59,28 +58,16 @@ export const creepHelpers = {
         }
     },
     extractFromStorage: function (creep: Creep) {
-        var creepers = _.filter(Game.creeps, (c: Creep) => creep.memory.role == c.memory.role);
-        if (!creep.memory.containerId) {
-            var targets = creep.room.find(FIND_STRUCTURES, {
-                filter: (s) => (s.structureType == STRUCTURE_STORAGE ) && s.store[RESOURCE_ENERGY] > 0
-            });
-            if (targets.length > 0) {
-                targets = _.sortBy(targets, (s: Structure) => creep.pos.getRangeTo(s))
-                creep.memory.containerId = targets[0].id;
-            }
-        }
-        var target: StructureStorage | null = Game.getObjectById(creep.memory.containerId);
-        if (target) {
-            var op = creep.withdraw(target, RESOURCE_ENERGY)
-            if (op == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target, { visualizePathStyle: { stroke: '#ffaa00' } })
-            } else if (op == OK) {
-                creep.memory.containerId = undefined;
+        var targets = creep.room.find(FIND_STRUCTURES, {
+            filter: (s) => (s.structureType == STRUCTURE_STORAGE ) && s.store[RESOURCE_ENERGY] > 0
+        });
+        if (targets.length > 0) {
+            if (creep.withdraw(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } })
             }
         }
     },
     extractFromContainer: function (creep: Creep) {
-        var creepers = _.filter(Game.creeps, (c: Creep) => creep.memory.role == c.memory.role);
         if (!creep.memory.containerId) {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (s) => (s.structureType == STRUCTURE_CONTAINER ) && s.store[RESOURCE_ENERGY] > 0

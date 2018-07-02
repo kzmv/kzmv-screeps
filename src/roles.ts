@@ -1,13 +1,12 @@
-
-
 export interface CreepRole {
     count: number;
     type: string;
     id: string;
     name: string;
-    template: any[];
+    template: any;
     priority: number;
     targetRoom?: string;
+    run?: Function;
 }
 
 export const roles: CreepRole[] = [
@@ -17,16 +16,13 @@ export const roles: CreepRole[] = [
         id: 'newbieCleaner-W17N42',
         name: "NewbieCleaner",
         targetRoom: 'W17N42',
-        template: [TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH,TOUGH, ATTACK, ATTACK,ATTACK, ATTACK, ATTACK, WORK, CARRY,  CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
-        priority: -13,
-    },
-    {
-        count: 0,
-        type: 'newbieCleaner',
-        id: 'newbieCleaner-W17N41',
-        name: "NewbieCleaner",
-        targetRoom: 'W17N41',
-        template: [ATTACK, ATTACK, ATTACK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "tough": 14,
+            "attack": 5,
+            "work": 1,
+            "carry": 2,
+            "move": 4
+        },
         priority: -13,
     },
     {
@@ -34,7 +30,11 @@ export const roles: CreepRole[] = [
         type: 'harvester',
         id: 'harvester1',
         name: "Harvester",
-        template: [WORK, WORK, CARRY, MOVE],
+        template: {
+            "work": 2,
+            "carry": 1,
+            "move": 1
+        },
         priority: -33,
     },
     {
@@ -42,39 +42,82 @@ export const roles: CreepRole[] = [
         type: 'harvesterPassive',
         id: 'harvesterPassive1',
         name: "HarvesterPassive",
-        template: [WORK, WORK, WORK, WORK, WORK, WORK, CARRY, MOVE, MOVE],
+        template: {
+            "work": 6,
+            "carry": 1,
+            "move": 2
+        },
         priority: -30,
+
     },
     {
-        count: 3,
+        count: 2,
         name: "carrier",
         type: 'carrier',
         id: 'carrier1',
-        template: [WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 1,
+            "carry": 6,
+            "move": 4
+        },
         priority: -31,
     },
     {
         count: 1,
-        name: "Upgrader",
-        type: 'upgrader',
-        id: 'upgrader1',
-        template: [WORK, WORK, WORK, WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE],
-        priority: -23,
-    },
-    {
-        count: 1,
-        name: "Builder",
-        type: 'builder',
-        id: 'builder1',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE],
+        name: "carrierMain",
+        type: 'carrierMain',
+        id: 'carrierMainMini',
+        template: {
+            "carry": 4,
+            "move": 2
+        },
         priority: -22,
     },
     {
-        count: 1,
+        count: 2,
+        name: "carrierMain",
+        type: 'carrierMain',
+        id: 'carrierMain',
+        template: {
+            "carry": 6,
+            "move": 4
+        },
+        priority: -32,
+    },
+    {
+        count: 2,
+        name: "Upgrader",
+        type: 'upgrader',
+        id: 'upgrader1',
+        template: {
+            "work": 4,
+            "carry": 8,
+            "move":2
+        },
+        priority: -23,
+    },
+    {
+        count: 2,
+        name: "Builder",
+        type: 'builder',
+        id: 'builder1',
+        template: {
+            "work": 4,
+            "carry": 6,
+            "move":6
+        },
+        priority: -22,
+    },
+    {
+        count: 0,
         name: "Repairer",
         type: 'repairer',
         id: 'repairer1',
-        template: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        template: {
+            "work": 2,
+            "carry": 4,
+            "move":4
+        },
         priority: -23,
     },
     {
@@ -82,7 +125,11 @@ export const roles: CreepRole[] = [
         name: "WallRepairer",
         type: 'wallRepairer',
         id: 'wallRepairer1',
-        template: [WORK, WORK, CARRY, CARRY, MOVE, MOVE],
+        template: {
+            "work": 2,
+            "carry": 4,
+            "move":4
+        },
         priority: -19,
     },
     {
@@ -91,7 +138,11 @@ export const roles: CreepRole[] = [
         type: 'otherRoomHarvester',
         targetRoom: 'W15N41',
         id: 'otherRoomHarvester1',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move":8
+        },
         priority: -17,
     },
     {
@@ -100,7 +151,11 @@ export const roles: CreepRole[] = [
         type: 'otherRoomHarvester',
         targetRoom: 'W16N42',
         id: 'otherRoomHarvester2',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move":8
+        },
         priority: -15,
     },
     {
@@ -109,7 +164,11 @@ export const roles: CreepRole[] = [
         type: 'otherRoomHarvester',
         targetRoom: 'W17N41',
         id: 'otherRoomHarvester-W17N41',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move":8
+        },
         priority: -17,
     },
     {
@@ -118,33 +177,47 @@ export const roles: CreepRole[] = [
         type: 'otherRoomHarvester',
         targetRoom: 'W14N41',
         id: 'otherRoomHarvester-W14N41',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move":8
+        },
         priority: -17,
     },
     {
-        count: 0,
-        name: "ORHarvester-W17N42",
+        count: 3,
+        name: "ORHarvester-W18N41",
         type: 'otherRoomHarvester',
-        targetRoom: 'W17N42',
-        id: 'otherRoomHarvester-W17N42',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE],
+        targetRoom: 'W18N41',
+        id: 'otherRoomHarvester-W18N41',
+        template: {
+            "work": 5,
+            "carry": 10,
+            "move":8
+        },
         priority: -17,
     },
     {
-        count: 0,
-        name: "ClaimerW17N42",
+        count: 1,
+        name: "ClaimerW18N41",
         type: 'claimer',
-        id: 'claimer-W17N42',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        id: 'claimer-W18N41',
+        template: {
+            "claim": 2,
+            "move":4
+        },
         priority: 1,
-        targetRoom: 'W17N42'
+        targetRoom: 'W18N41'
     },
     {
         count: 1,
         name: "Claimer",
         type: 'claimer',
         id: 'claimer2',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move":4
+        },
         priority: -18,
         targetRoom: 'W15N41'
     },
@@ -153,7 +226,10 @@ export const roles: CreepRole[] = [
         name: "Claimer",
         type: 'claimer',
         id: 'claimer1',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move":4
+        },
         priority: 1,
         targetRoom: 'W16N42'
     },
@@ -162,7 +238,10 @@ export const roles: CreepRole[] = [
         name: "Claimer",
         type: 'claimer',
         id: 'claimerW17N41',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move":4
+        },
         priority: 1,
         targetRoom: 'W17N41'
     },
@@ -171,19 +250,13 @@ export const roles: CreepRole[] = [
         name: "ClaimerW14N41",
         type: 'claimer',
         id: 'claimerW14N41',
-        template: [CLAIM, CLAIM, MOVE, MOVE],
+        template: {
+            "claim": 2,
+            "move":4
+        },
         priority: 1,
         targetRoom: 'W14N41'
     },
-    {
-        count: 0,
-        name: "ORUpgrader",
-        type: 'otherRoomUpgrader',
-        id: 'otherRoomUpgrader1',
-        targetRoom: 'W15N41',
-        template: [WORK, WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE],
-        priority: -9,
-    }
 
 ]
 

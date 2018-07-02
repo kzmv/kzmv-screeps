@@ -9,22 +9,9 @@ export const roleCarrier = {
             var targets = creep.room.find(FIND_STRUCTURES, {
                 filter: (structure) => {
                     return (
-                        structure.structureType == STRUCTURE_TOWER ||
-                        structure.structureType == STRUCTURE_EXTENSION ||
-                        structure.structureType == STRUCTURE_SPAWN
-                    )  && structure.energy < structure.energyCapacity;
+                        structure.structureType == STRUCTURE_STORAGE);
                 }
             });
-            if (targets.length == 0) {
-                //leave at storage
-                targets = creep.room.find(FIND_STRUCTURES, {
-                    filter: (structure) => {
-                        return (
-                            structure.structureType == STRUCTURE_STORAGE);
-                    }
-                });
-            }
-
             targets = _.sortBy(targets, (s: AnyStructure) => creep.pos.getRangeTo(s))
             if (targets.length > 0) {
                 if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
