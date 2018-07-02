@@ -481,6 +481,7 @@ var creepHelpers = {
                 s.structureType == STRUCTURE_SPAWN ||
                 s.structureType == STRUCTURE_TOWER) && s.energy < s.energyCapacity; }
         });
+        targets = _$2.sortBy(targets, function (s) { return creep.pos.getRangeTo(s); });
         if (targets.length > 0) {
             if (creep.transfer(targets[0], RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(targets[0], { visualizePathStyle: { stroke: '#ffaa00' } });
