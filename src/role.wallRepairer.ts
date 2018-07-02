@@ -1,5 +1,5 @@
+import { roleBuilder } from './role.builder';
 
-import {roleRepairer} from 'role.repairer'
 import {creepHelpers} from 'helpers.role';
 
 var percentageW = 0.000100;
@@ -31,7 +31,7 @@ export const roleWallRepairer = {
                 }
             }
             else {
-                roleRepairer.run(creep);
+                roleBuilder.run(creep);
             }
         }
         else {

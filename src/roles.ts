@@ -97,7 +97,7 @@ export const roles: CreepRole[] = [
         priority: -23,
     },
     {
-        count: 2,
+        count: 0,
         name: "Builder",
         type: 'builder',
         id: 'builder1',
@@ -126,9 +126,9 @@ export const roles: CreepRole[] = [
         type: 'wallRepairer',
         id: 'wallRepairer1',
         template: {
-            "work": 2,
-            "carry": 4,
-            "move":4
+            "work": 4,
+            "carry": 8,
+            "move":6
         },
         priority: -19,
     },
